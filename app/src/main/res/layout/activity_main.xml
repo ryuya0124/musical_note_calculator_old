@@ -10,30 +10,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="BPMを入力"
-        android:inputType="number" />
+        android:inputType="number"
+        android:layout_marginBottom="16dp" />
 
     <Spinner
         android:id="@+id/unitSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:entries="@array/units" />
 
     <Button
         android:id="@+id/calculateButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="計算" />
+        android:text="計算"
+        android:layout_marginBottom="16dp" />
 
-    <TextView
-        android:id="@+id/resultView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="図を確認してください"
-        android:paddingTop="16dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
 
-    <io.github.ryuya0124.musical.note.calculator.NoteView
-        android:id="@+id/noteView"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="#F0F0F0" />
 </LinearLayout>
