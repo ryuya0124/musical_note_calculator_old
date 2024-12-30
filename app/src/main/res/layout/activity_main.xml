@@ -1,0 +1,39 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/inputBPM"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="BPMを入力"
+        android:inputType="number" />
+
+    <Spinner
+        android:id="@+id/unitSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/units" />
+
+    <Button
+        android:id="@+id/calculateButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="計算" />
+
+    <TextView
+        android:id="@+id/resultView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="図を確認してください"
+        android:paddingTop="16dp" />
+
+    <io.github.ryuya0124.musical.note.calculator.NoteView
+        android:id="@+id/noteView"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="#F0F0F0" />
+</LinearLayout>
