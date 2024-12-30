@@ -45,8 +45,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private List<Note> calculateNoteLengths(int bpm, String unit) {
-        double beatDurationMs = 60000.0 / bpm; // 1拍の長さ(ms)
+        double quarterNoteLengthMs = 60000.0 / bpm; // 4分音符の長さ（ms）
 
+        // 単位変換ファクター
         double conversionFactor = 1.0;
         if (unit.equals("s")) {
             conversionFactor = 1 / 1000.0; // 秒
@@ -54,30 +55,41 @@ public class MainActivity extends AppCompatActivity {
             conversionFactor = 1000.0; // マイクロ秒
         }
 
+        // 各音符の計算
         List<Note> notes = new ArrayList<>();
-        notes.add(new Note("ロンガ", formatDuration(beatDurationMs * 4 * 4 * conversionFactor, unit)));
-        notes.add(new Note("マキシマ", formatDuration(beatDurationMs * 8 * conversionFactor, unit)));
-        notes.add(new Note("倍全音符", formatDuration(beatDurationMs * 4 * 2 * conversionFactor, unit)));
-        notes.add(new Note("全音符", formatDuration(beatDurationMs * 4 * conversionFactor, unit)));
-        notes.add(new Note("付点2分音符", formatDuration(beatDurationMs * 4 * 3 / 4 * conversionFactor, unit)));
-        notes.add(new Note("2分音符", formatDuration(beatDurationMs * 4 * 1 / 2 * conversionFactor, unit)));
-        notes.add(new Note("4拍3連", formatDuration(beatDurationMs * 4 / 3 * conversionFactor, unit)));
-        notes.add(new Note("付点4分音符", formatDuration(beatDurationMs * 3 / 8 * 4 * conversionFactor, unit)));
-        notes.add(new Note("4分音符", formatDuration(beatDurationMs * conversionFactor, unit)));
-        notes.add(new Note("付点8分音符", formatDuration(beatDurationMs * 3 / 16 * conversionFactor, unit)));
-        notes.add(new Note("2拍3連", formatDuration(beatDurationMs / 6 * conversionFactor, unit)));
-        notes.add(new Note("8分音符", formatDuration(beatDurationMs / 8 * conversionFactor, unit)));
-        notes.add(new Note("付点16分音符", formatDuration(beatDurationMs * 3 / 32 * conversionFactor, unit)));
-        notes.add(new Note("1拍3連", formatDuration(beatDurationMs / 12 * conversionFactor, unit)));
-        notes.add(new Note("16分音符", formatDuration(beatDurationMs / 16 * conversionFactor, unit)));
-        notes.add(new Note("1拍5連", formatDuration(beatDurationMs / 20 * conversionFactor, unit)));
-        notes.add(new Note("1拍6連", formatDuration(beatDurationMs / 24 * conversionFactor, unit)));
-        notes.add(new Note("32分音符", formatDuration(beatDurationMs / 32 * conversionFactor, unit)));
+        notes.add(new Note("マキシマ", formatDuration(calculateNoteLength(quarterNoteLengthMs, 32), conversionFactor, unit)));
+        notes.add(new Note("ロンガ", formatDuration(calculateNoteLength(quarterNoteLengthMs, 16), conversionFactor, unit)));
+        notes.add(new Note("倍全音符", formatDuration(calculateNoteLength(quarterNoteLengthMs, 4 * 2), conversionFactor, unit)));
+        notes.add(new Note("全音符", formatDuration(calculateNoteLength(quarterNoteLengthMs, 4), conversionFactor, unit)));
+        notes.add(new Note("付点2分音符", formatDuration(calculateNoteLength(quarterNoteLengthMs, 2, true), conversionFactor, unit)));
+        notes.add(new Note("2分音符", formatDuration(calculateNoteLength(quarterNoteLengthMs, 2), conversionFactor, unit)));
+        notes.add(new Note("4拍3連", formatDuration(calculateNoteLength(quarterNoteLengthMs, 4 / 3.0), conversionFactor, unit)));
+        notes.add(new Note("付点4分音符", formatDuration(calculateNoteLength(quarterNoteLengthMs, 1, true), conversionFactor, unit)));
+        notes.add(new Note("4分音符", formatDuration(calculateNoteLength(quarterNoteLengthMs, 1), conversionFactor, unit)));
+        notes.add(new Note("付点8分音符", formatDuration(calculateNoteLength(quarterNoteLengthMs, 1 / 2.0, true), conversionFactor, unit)));
+        notes.add(new Note("2拍3連", formatDuration(calculateNoteLength(quarterNoteLengthMs, 1 / 1.5), conversionFactor, unit)));
+        notes.add(new Note("8分音符", formatDuration(calculateNoteLength(quarterNoteLengthMs, 1 / 2.0), conversionFactor, unit)));
+        notes.add(new Note("付点16分音符", formatDuration(calculateNoteLength(quarterNoteLengthMs, 1 / 4.0, true), conversionFactor, unit)));
+        notes.add(new Note("1拍3連", formatDuration(calculateNoteLength(quarterNoteLengthMs, 1 / 3.0), conversionFactor, unit)));
+        notes.add(new Note("16分音符", formatDuration(calculateNoteLength(quarterNoteLengthMs, 1 / 4.0), conversionFactor, unit)));
+        notes.add(new Note("1拍5連", formatDuration(calculateNoteLength(quarterNoteLengthMs, 1 / 5.0), conversionFactor, unit)));
+        notes.add(new Note("1拍6連", formatDuration(calculateNoteLength(quarterNoteLengthMs, 1 / 6.0), conversionFactor, unit)));
+        notes.add(new Note("32分音符", formatDuration(calculateNoteLength(quarterNoteLengthMs, 1 / 8.0), conversionFactor, unit)));
 
         return notes;
     }
 
-    private String formatDuration(double duration, String unit) {
-        return String.format("%.2f %s", duration, unit);
+    private double calculateNoteLength(double quarterNoteLength, double multiplier) {
+        return quarterNoteLength * multiplier;
+    }
+
+    private double calculateNoteLength(double quarterNoteLength, double multiplier, boolean isDotted) {
+        double baseLength = quarterNoteLength * multiplier;
+        return isDotted ? baseLength + (baseLength / 2) : baseLength;
+    }
+
+    private String formatDuration(double duration, double conversionFactor, String unit) {
+        // 時間のフォーマット
+        return String.format("%.2f %s", duration * conversionFactor, unit);
     }
 }
