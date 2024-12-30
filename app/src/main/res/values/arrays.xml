@@ -3,5 +3,6 @@
     <string-array name="units">
         <item>ms</item>
         <item>s</item>
+        <item>µs</item>
     </string-array>
 </resources>
