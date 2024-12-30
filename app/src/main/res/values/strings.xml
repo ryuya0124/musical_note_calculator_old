@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">musical note calculator</string>
+    <string-array name="note_lengths">
+        <item>全音符</item>
+        <item>2分音符</item>
+        <item>4分音符</item>
+        <item>8分音符</item>
+        <item>16分音符</item>
+    </string-array>
 </resources>

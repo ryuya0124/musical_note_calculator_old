@@ -14,12 +14,14 @@ public class NoteView extends View {
     private Paint paint;
     private double[] noteLengths = {};
     private String unit = "ms";
+    private float noteLength = 0.5f; // デフォルト値を設定
 
     public NoteView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setStrokeWidth(8f);
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(2f);
     }
 
     // 音符の長さデータを設定
@@ -29,36 +31,27 @@ public class NoteView extends View {
         invalidate(); // 再描画
     }
 
+
+    public void setNoteLength(float length) {
+        this.noteLength = length;
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        float width = getWidth();
+        float height = getHeight();
 
-        if (noteLengths.length == 0) return;
+        // Draw note stem
+        canvas.drawLine(width * 0.9f, height * 0.2f, width * 0.9f, height * 0.8f, paint);
 
-        int width = getWidth();
-        int height = getHeight();
-        int padding = 20;
+        // Draw note head
+        canvas.drawOval(width * 0.7f, height * 0.7f, width * 0.9f, height * 0.8f, paint);
 
-        double maxLength = noteLengths[0]; // 最大長さを基準にスケール調整
-        int yPosition = padding;
-
-        paint.setTextSize(36f);
-        paint.setColor(Color.BLACK);
-
-        // 各音符を描画
-        for (int i = 0; i < noteLengths.length; i++) {
-            double length = noteLengths[i];
-            int barWidth = (int) (width * (length / maxLength));
-
-            // ラベルを描画
-            String label = String.format("音符%d: %.2f %s", i + 1, length, unit);
-            canvas.drawText(label, padding, yPosition + 40, paint);
-
-            // 棒を描画
-            paint.setColor(Color.BLUE);
-            canvas.drawRect(padding, yPosition + 50, padding + barWidth, yPosition + 100, paint);
-
-            yPosition += 120; // 次の音符の位置
-        }
+        // Draw length indicator
+        canvas.drawLine(0, height / 2, width * noteLength, height / 2, paint);
     }
+
+
 }
